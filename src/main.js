@@ -1,10 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import App from './App.vue'
-import Post from './components/Post.vue'
-import Hello from './components/Hello.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import App from './App.vue';
+import Homely from './Homely.vue';
+import Listing from './components/Listing.vue';
+import Hello from './components/Hello.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
  routes: [
@@ -14,16 +15,16 @@ const router = new Router({
      component: Hello,
    },
    {
-     path: '/post/:id',
-     name:'post',
-     component: Post,
+     path: '/listing/:id',
+     name:'listing',
+     component: Listing,
      props: true,
    },
- ]
-})
+ ],
+});
 
 new Vue({
  el: '#app',
- render: h => h(App),
- router
-})
+ render: h => h(Homely),
+ router,
+});

@@ -1,8 +1,8 @@
 <template lang="html">
   <div class="listing" v-if="listing">
-    <h1 class="listing__title">{{ listing.title }}</h1>
-    <p class="listing__body">{{ listing.body }}</p>
-    <p  class="listing__id">{{ listing.id }}</p>
+    <h1 class="listing__title">{{listing.location.address}}, {{listing.location.suburb}}, {{listing.location.stateCode}}</h1>
+    <p class="listing__body">{{ listing.description }}</p>
+    <p class="listing__id">{{ listing.id }}</p>
   </div>
 </template>
 
@@ -18,14 +18,14 @@
     data() {
       return {
         listing: null,
-        endpoint: 'https://jsonplaceholder.typicode.com/listings/',
+        endpoint: 'https://api.homely.com.au/listing/',
       }
     },
     methods: {
       getListing(id) {
         axios(this.endpoint + id)
           .then(response => {
-            this.listing = response.data
+            this.listing = response.data.listing
           })
           .catch( error => {
             console.log('-----error-------');
@@ -35,11 +35,11 @@
     },
     
     created() {
-      this.getlisting(this.id);
+      this.getListing(this.id);
     },
     watch: {
       '$route'() {
-        this.getlisting(this.id);
+        this.getListing(this.id);
       }
     }
   }
