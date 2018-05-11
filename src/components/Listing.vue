@@ -2,7 +2,6 @@
   <div class="listing" v-if="listing">
     <h1 class="listing__title">{{listing.location.address}}, {{listing.location.suburb}}, {{listing.location.stateCode}}</h1>
     <p class="listing__body">{{ listing.description }}</p>
-    <p class="listing__id">{{ listing.id }}</p>
   </div>
 </template>
 
@@ -59,17 +58,6 @@
     &__body {
       position: relative;
       z-index: 1;
-    }
-    &__id {
-      position: absolute;
-      font-size: 280px;
-      bottom: -50px;
-      margin: 0;
-      color: #eeeeee;
-      right: -20px;
-      line-height: 1;
-      font-weight: 900;
-      z-index: 0;
     }
   }
 </style>

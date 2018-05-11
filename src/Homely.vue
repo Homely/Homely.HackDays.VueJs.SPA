@@ -5,19 +5,22 @@
         <img src="https://homely-web.appiancdn.com/assets/images/homely-logo.svg?2844.0.0.0" alt="Homely logo">
       </div>
       <div class="search">
-        <input placeholder="search locations" />
+        <input v-on:keyup.enter="getListings" ref="searchBox" placeholder="search locations" />
         <button v-on:click="getListings">Search</button>
       </div>
     </header>
     <main>
       <aside class="sidebar">
-        <h1>Listings</h1>
+        <h1 ref="searchTitle">Search for a location</h1>
         <router-link
           v-for="listing in listings"
           active-class="is-active"
           class="link"
           :to="{ name: 'listing', params: { id: listing.id } }">
-          {{listing.location.address}}, {{listing.location.suburb}}, {{listing.location.stateCode}}
+          <img :src="'//res-2.cloudinary.com/hd1n2hd4y/image/upload/f_auto,fl_lossy,q_auto,c_fill,w_52,h_52,dpr_1.0/' + listing.images[0].identifier" />
+          <b>{{listing.info.price.longDescription}}</b><br/>
+          <div>{{listing.location.address}}</div>
+          <i>{{listing.mainFeatures.bedrooms}} beds, {{listing.mainFeatures.bathrooms}} baths, {{listing.mainFeatures.carSpaces}} cars</i>
         </router-link>
       </aside>
       <div class="content">
@@ -34,29 +37,48 @@
     data () {
       return {
         listings: [],
-        endpoint: 'https://api.homely.com.au/listings/location/list?json=',
+        locationEndpoint: 'https://api.homely.com.au/search/locations?q=',
+        listingListEndpoint: 'https://api.homely.com.au/listings/location/list?json=',
       }
     },
     methods: {
       getListings(e) {
         e.preventDefault();
-        const json = {
-          "sort":5,
-          "filter": {
-            "mode":1,
-            "locationId":5714663,
-            "wellKnownText":"POLYGON((145.81387037252557 -38.05629730022885, 145.81387037252557 -38.28221702802891, 146.0511063954748 -38.28221702802891, 146.0511063954748 -38.05629730022885, 145.81387037252557 -38.05629730022885))",
-          },
-          "paging":{"skip":0,"take":24}
-        };
-        axios.get(this.endpoint + JSON.stringify(json))
-          .then(response => {
-            this.listings = response.data.items;
-          })
-          .catch(error => {
-            console.log('-----error-------');
-            console.log(error);
-          })
+        const searchTerm = this.$refs.searchBox.value.toLowerCase();
+        const searchTitle = this.$refs.searchTitle;
+        searchTitle.innerText = 'Searching...';
+        axios.get(this.locationEndpoint + searchTerm).then(response => {
+          if (response.data.locations) {
+            const json = {
+              "sort":5,
+              "filter": {
+                "mode":1,
+                "locationId": response.data.locations[0].id,
+              },
+              "paging": {
+                "skip":0,
+                "take":24,
+              }
+            };
+            axios.get(this.listingListEndpoint + JSON.stringify(json))
+              .then(response => {
+                this.listings = response.data.items;
+                const location = this.listings.length ? this.listings[0].location : null;
+                if (location) {
+                  searchTitle.innerText = `Homes for sale in ${location.suburb}, ${location.stateCode}`;
+                } else {
+                  searchTitle.innerText = 'Search for a location';
+                }
+              })
+              .catch(error => {
+                console.log('-----error-------');
+                console.log(error);
+              });
+          } else {
+            this.listings = [];
+          }
+        });
+       
       }
     }
   }
@@ -66,6 +88,7 @@
 body {
   margin: 0;
   padding: 0;
+  line-height: auto;
 }
 #app {
   font-family: 'effra', Helvetica, Arial, sans-serif;
@@ -156,10 +179,10 @@ main {
   overflow: hidden;
 }
 aside {
-  flex: 1 0 30%;
+  flex: 1 0 20%;
   height: 100%;
   overflow-y: auto;
-  width: 30%;
+  width: auto;
   padding: 50px 30px;
   box-sizing: border-box;
   text-align: left;
@@ -175,12 +198,35 @@ aside {
   text-decoration: none;
   margin-bottom: 10px;
   color: #2c3e50;
+  padding: 8px;
+  margin: 0;
+  border-radius: 3px;
+  position: relative;
+  img {
+    float: left;
+    margin-right: 8px;
+  }
+  div {
+    position: relative;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  i {
+    font-size: 12px;
+    font-style: inherit;
+    color: #666;
+  }
   &--home {
     text-transform: uppercase;
     margin-bottom: 30px;
   }
-  &.is-active {
-    color: #fd4974;
+  &.is-active, &:hover {
+    background: #fd4974;
+    color: #fff;
+    i {
+      color: #eee;
+    }
   }
 }
 </style>
