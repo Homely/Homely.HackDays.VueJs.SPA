@@ -73,11 +73,12 @@
         font-weight: 600;
         display: block;
         font-style: inherit;
+        margin: 0 0 10px;
       }
       i {
         margin: 10px 0 0;
         display: block;
-        font-size: 18px;
+        font-size: 20px;
         font-style: inherit;
         font-weight: 400;
       }
