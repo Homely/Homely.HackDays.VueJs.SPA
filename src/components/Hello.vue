@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="greeting">
-    <img src="../assets/logo.png" alt="Homely logo">
+    <img src="https://homely-web.appiancdn.com/assets/images/touch/icon-192x192.png" alt="Homely logo">
   </div>
 </template>
 
