@@ -89,6 +89,7 @@ body {
   margin: 0;
   padding: 0;
   line-height: auto;
+  overflow: hidden;
 }
 #app {
   font-family: 'effra', Helvetica, Arial, sans-serif;
@@ -96,7 +97,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #3c515b;
-  margin-top: 60px;
+  overflow: hidden;
 }
 
 h1, h2 {
@@ -173,7 +174,7 @@ main {
   display: flex;
   height: calc(100vh - 90px);
   width: 100%;
-  margin-top: 40px;
+  margin-top: 113px;
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
@@ -183,7 +184,7 @@ aside {
   height: 100%;
   overflow-y: auto;
   width: auto;
-  padding: 50px 30px;
+  padding: 10px;
   box-sizing: border-box;
   text-align: left;
 }
